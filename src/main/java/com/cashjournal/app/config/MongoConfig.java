@@ -30,6 +30,10 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
                 builder.enabled(true)
                     .invalidHostNameAllowed(true);
             })
+            .applyToSocketSettings(builder -> 
+                builder.connectTimeout(30000)
+                      .readTimeout(60000)
+            )
             .build();
 
         return MongoClients.create(mongoClientSettings);
