@@ -27,7 +27,8 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
             .applyConnectionString(connectionString)
             .applyToSslSettings(builder -> {
-                builder.enabled(true);
+                builder.enabled(true)
+                    .invalidHostNameAllowed(true);
             })
             .build();
 

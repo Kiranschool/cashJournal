@@ -63,6 +63,35 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/api/auth/login")
+    @ResponseBody
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUsernameOrEmail(),
+                    loginRequest.getPassword()
+                )
+            );
+            
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            User user = userService.findByUsernameOrEmail(loginRequest.getUsernameOrEmail());
+            
+            session.setAttribute("username", user.getUsername());
+            
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Login successful",
+                "firstName", user.getFirstName()
+            ));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "success", false,
+                "error", "Invalid username/email or password"
+            ));
+        }
+    }
+
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
