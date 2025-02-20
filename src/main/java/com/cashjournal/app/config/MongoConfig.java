@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
@@ -31,8 +32,8 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
                     .invalidHostNameAllowed(true);
             })
             .applyToSocketSettings(builder -> 
-                builder.connectTimeout(30000)
-                      .readTimeout(60000)
+                builder.connectTimeout(30000, TimeUnit.MILLISECONDS)
+                      .readTimeout(60000, TimeUnit.MILLISECONDS)
             )
             .build();
 
