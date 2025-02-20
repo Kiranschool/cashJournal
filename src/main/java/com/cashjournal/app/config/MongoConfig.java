@@ -35,6 +35,9 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
                 builder.connectTimeout(30000, TimeUnit.MILLISECONDS)
                       .readTimeout(60000, TimeUnit.MILLISECONDS)
             )
+            .applyToClusterSettings(builder -> 
+                builder.serverSelectionTimeout(5000, TimeUnit.MILLISECONDS)
+            )
             .build();
 
         return MongoClients.create(mongoClientSettings);
